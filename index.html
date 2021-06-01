@@ -1,0 +1,935 @@
+<!doctype html>
+<html lang="us">
+<head>
+    <meta charset="utf-8">
+    <title>Статусы платежей или поступлений</title>
+    <link href="css/reset.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+<svg style="display: none">
+    <symbol id="svg_home" viewBox="0 0 16 16">
+        <path d="M6 14H2V8V13V9H0V8H2V13H6V8H9V13H13V8H15V9H13V13V14H9V13V9H6V13V14Z" fill="white"
+              fill-opacity="0.7"></path>
+        <path d="M6 13H2V8H0L7.5 1L15 8H13V13H9V8H6V13Z" fill="#141414" fill-opacity="0.74"></path>
+    </symbol>
+    <symbol id="svg_arrow-prev" viewBox="0 0 16 16">
+        <path d="M1 7.5L7 2V6H15V9H7V13L1 7.5Z" fill="#141414" fill-opacity="0.74"></path>
+        <path d="M1 7.5L7 13V10V9H15V10H7V14L1 8.5V7.5Z" fill="white" fill-opacity="0.74"></path>
+    </symbol>
+    <symbol id="svg_arrow-next" viewBox="0 0 16 16">
+        <path d="M15 7.5L9 2V6H1V9H9V13L15 7.5Z" fill="#141414" fill-opacity="0.74"></path>
+        <path d="M15 7.5L9 13V10V9H1V10H9V14L15 8.5V7.5Z" fill="white" fill-opacity="0.74"></path>
+    </symbol>
+    <symbol id="svg_diskette" viewBox="0 0 16 16">
+        <path d="M5 4H10V5H5V4Z"></path>
+        <path d="M5 6H10V7H5V6Z"></path>
+        <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M15 14C15 15.1046 14.1046 16 13 16H2C0.89543 16 0 15.1046 0 14V4C0 2.8954 0.89543 2 2 2H13C14.1046 2 15 2.8954 15 4V14ZM1 14V4C1 3.4477 1.44772 3 2 3H3V9H12V3H13C13.5523 3 14 3.4477 14 4V14C14 14.5523 13.5523 15 13 15H11V12H4V15H2C1.44772 15 1 14.5523 1 14ZM4 8V3H11V8H4ZM7 13H5V15H7V13Z"></path>
+    </symbol>
+    <symbol id="svg_print" viewBox="0 0 16 16">
+        <path d="M5 13H8V14H5V13Z"></path>
+        <path d="M5 11H11V12H5V11Z"></path>
+        <path d="M9 6H11V7H9V6Z"></path>
+        <path d="M12 6H14V7H12V6Z"></path>
+        <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M13 1H3V4H2C0.895431 4 0 4.89543 0 6V12C0 13.1046 0.895431 14 2 14H3V16H13V14H14C15.1046 14 16 13.1046 16 12V6C16 4.89543 15.1046 4 14 4H13V1ZM4 2H12V4H4V2ZM13 5H3H2C1.44772 5 1 5.44772 1 6V12C1 12.5523 1.44772 13 2 13H3V8H13V13H14C14.5523 13 15 12.5523 15 12V6C15 5.44772 14.5523 5 14 5H13ZM12 9H4V15H12V9Z"></path>
+    </symbol>
+    <symbol id="svg_paperSearch" viewBox="0 0 16 16">
+        <path d="M3 16C2.4594 16 1.90399 15.9351 1.5 15.5C1.10847 15.0784 1 14.4533 1 14V3C1 2.42477 1.27755 1.93324 1.60539 1.60539C1.93324 1.27755 2.42477 1 3 1H12C12.5406 1 13.0913 1.15949 13.4953 1.59455C13.8868 2.01619 14 2.54671 14 3V5H13V3C13 2.4 12.7 2 12 2H3C2.5 2 2 2.5 2 3V14C2 14.6 2.3 15 3 15H9V16H3Z"></path>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M14.5 15.5L11.5 12.5L13 11L16 14L14.5 15.5Z"></path>
+        <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M10.5 12.25C12.0188 12.25 13.25 11.0188 13.25 9.5C13.25 7.98122 12.0188 6.75 10.5 6.75C8.98122 6.75 7.75 7.98122 7.75 9.5C7.75 11.0188 8.98122 12.25 10.5 12.25ZM10.5 13.25C12.5711 13.25 14.25 11.5711 14.25 9.5C14.25 7.42893 12.5711 5.75 10.5 5.75C8.42893 5.75 6.75 7.42893 6.75 9.5C6.75 11.5711 8.42893 13.25 10.5 13.25Z"></path>
+    </symbol>
+</svg>
+<div class="wrapper">
+    <div class="overlay" id="message_1">
+        <div class="overlay__content">
+            <p>Предлагаем вам наполнить заявки на оплаты и планируемые поступления необходимыми реквизитами,
+                в зависимости от ситуации и задач бизнеса.</p>
+            <p>Интерактивный тренажер предложит различные вводные данные, исходя из них перетащите на голубые поля
+                заявки нужные реквизиты из нижнего поля.</p>
+            <p>Ваша задача - добавить в документы реквизиты, которые помогут максимально эффективно управлять
+                платежным календарем и не тратить время, силы и деньги на добавление реквизитов, которые вам не нужны.</p>
+            <p>Удачи!</p>
+            <button type="button">Начать</button>
+        </div>
+    </div>
+    <div class="overlay" id="message_2">
+        <div class="overlay__content">
+            <h1>Браво!</h1>
+            <p>Вы справились</p>
+            <button type="button">Следующая тренировка</button>
+        </div>
+    </div>
+    <div class="overlay" id="message_3">
+        <div class="overlay__content">
+            <h1>Браво!</h1>
+            <p>Вы справились</p>
+            <button type="button">Следующая тренировка</button>
+        </div>
+    </div>
+    <div class="overlay" id="message_4">
+        <div class="overlay__content">
+            <h1>Браво!</h1>
+            <p>Вы справились со всеми заданиями</p>
+            <button type="button">Попробовать еще раз</button>
+        </div>
+    </div>
+    <div class="task" id="task_1">
+        <div class="task__description">
+            <p>
+                Ваша компания открывает новую торговую сеть.
+                <br/>
+                У этого проекта будет приоритет в оплатах.
+                <br/>
+                Средства поступают на расчетный счет от физлиц через онлайн-кассы.
+                <br/>
+                Поступления планируются общей суммой за день.
+                <br/>
+                В компании три филиала. Каждое подразделение имеет свой расчетный счет.
+            </p>
+            <p><strong>Перетяните на голубые поля те реквизиты, которые помогут не запутаться в поступлениях.</strong></p>
+        </div>
+        <div class="card">
+            <div class="top">
+                <div class="top__block">
+                    <span class="top__button top__button-home">
+                        <svg class="svg_icon">
+                            <use xlink:href="#svg_home" href="#svg_home"></use>
+                        </svg>
+                    </span>
+                    <span class="top__button top__button-prev">
+                        <svg class="svg_icon">
+                            <use xlink:href="#svg_arrow-prev" href="#svg_arrow-prev"></use>
+                        </svg>
+                    </span>
+                    <span class="top__button top__button-next disabled">
+                        <svg class="svg_icon">
+                            <use xlink:href="#svg_arrow-next" href="#svg_arrow-next"></use>
+                        </svg>
+                    </span>
+                </div>
+                <div class="top__block" style="margin: 0 auto 0 1em">
+                    <span class="sprited star"></span>
+                    <div class="toplineBox">
+                        Плановое поступление 000000001 от 02.01.2021
+                    </div>
+                </div>
+                <div class="top__block">
+                    <span class="sprited url"></span>
+                    <span class="sprited more"></span>
+                    <span class="sprited close"></span>
+                </div>
+            </div>
+            <div class="content">
+                <div class="commands">
+                    <div class="command command__type-main">
+                        <span class="command__text">Провести и закрыть</span>
+                    </div>
+                    <div class="command">
+                        <span class="command__text">Провести</span>
+                    </div>
+                    <div class="command command__type-post" style="margin: 0 1em;">
+                        <span class="command__text">Сохранить</span>
+                    </div>
+                    <div class="command">
+                        <span class="command__ico">
+                            <img src="css/dk.png" alt="operations" />
+                        </span>
+                    </div>
+                    <div class="command command__type-more" style="margin-left: auto;">
+                        <span class="command__text">Еще</span>
+                        <span class="command__drop"></span>
+                    </div>
+                </div>
+                <div class="form">
+
+                    <div class="field__label">
+                        <label>Номер:</label>
+                    </div>
+
+                    <div class="field__value">
+                        <div class="input__out">
+                            <div class="input__in">
+                                <input type="text" class="editInput" readonly value="000000001" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field__quest">
+                        <div class="placeholder"></div>
+                    </div>
+
+                    <div class="field__label">
+                        <label>Дата:</label>
+                    </div>
+                    <div class="field__value">
+                        <div class="input__out">
+                            <div class="input__in">
+                                <input type="text" class="editInput" readonly value="21.02.2021 12:00:00" />
+                            </div>
+                            <div class="input__buttons">
+                                <span class="btn calendar"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field__quest">
+                        <div class="placeholder"></div>
+                    </div>
+
+                    <div class="field__label">
+                        <label>Дата по договору:</label>
+                    </div>
+                    <div class="field__value">
+                        <div class="input__out">
+                            <div class="input__in">
+                                <input type="text" class="editInput" readonly value="05.05.2021" />
+                            </div>
+                            <div class="input__buttons">
+                                <span class="btn calendar"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field__quest">
+                        <div class="placeholder"></div>
+                    </div>
+
+                    <div class="field__label">
+                        <label>Дата платежа:</label>
+                    </div>
+                    <div class="field__value">
+                        <div class="input__out">
+                            <div class="input__in">
+                                <input type="text" class="editInput" readonly value="07.05.2021" />
+                            </div>
+                            <div class="input__buttons">
+                                <span class="btn calendar"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field__quest">
+                        <div class="placeholder"></div>
+                    </div>
+
+                    <div class="field__label">
+                        <label>Смещение по дате:</label>
+                    </div>
+                    <div class="field__value">
+                        <div class="input__out">
+                            <div class="input__in">
+                                <input type="text" class="editInput" readonly value="2" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field__quest">
+                        <div class="placeholder"></div>
+                    </div>
+
+                    <div class="sum"></div>
+                </div>
+            </div>
+        </div>
+        <div class="variants">
+            <div class="variant correct">
+                <div class="field__label">
+                    <label>ЦФО:</label>
+                </div>
+                <div class="field__value">
+                    <div class="input__out">
+                        <div class="input__in">
+                            <input type="text" class="editInput" readonly value="Регион Юг" />
+                        </div>
+                        <div class="input__buttons">
+                            <span class="btn drop"></span>
+                            <span class="btn dictionary"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="variant correct">
+                <div class="field__label">
+                    <label>Статус:</label>
+                </div>
+                <div class="field__value">
+                    <div class="input__out">
+                        <div class="input__in">
+                            <input type="text" class="editInput" readonly value="Запланирован" />
+                        </div>
+                        <div class="input__buttons">
+                            <span class="btn drop"></span>
+                            <span class="btn dictionary"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="variant correct">
+                <div class="field__label">
+                    <label>Статья:</label>
+                </div>
+                <div class="field__value">
+                    <div class="input__out">
+                        <div class="input__in">
+                            <input type="text" class="editInput" readonly value="Оплата сырья и материалов" />
+                        </div>
+                        <div class="input__buttons">
+                            <span class="btn drop"></span>
+                            <span class="btn dictionary"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="variant incorrect">
+                <div class="field__label">
+                    <label>Ответственный:</label>
+                </div>
+                <div class="field__value">
+                    <div class="input__out">
+                        <div class="input__in">
+                            <input type="text" class="editInput" readonly value="Иванов Петр Сергеевич" />
+                        </div>
+                        <div class="input__buttons">
+                            <span class="btn drop"></span>
+                            <span class="btn dictionary"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hint">
+                    Стоит ли включать в список реквизитов планируемого поступления ответственного менеджера в случае B2C продаж?
+                </div>
+            </div>
+            <div class="variant correct">
+                <div class="field__label">
+                    <label>Проект:</label>
+                </div>
+                <div class="field__value">
+                    <div class="input__out">
+                        <div class="input__in">
+                            <input type="text" class="editInput" readonly value="Расширение торговой сети" />
+                        </div>
+                        <div class="input__buttons">
+                            <span class="btn drop"></span>
+                            <span class="btn dictionary"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="variant correct">
+                <div class="field__label">
+                    <label>Счет/Касса:</label>
+                </div>
+                <div class="field__value">
+                    <div class="input__out">
+                        <div class="input__in">
+                            <input type="text" class="editInput" readonly value="р/с в Банке №1" />
+                        </div>
+                        <div class="input__buttons">
+                            <span class="btn drop"></span>
+                            <span class="btn dictionary"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="variant incorrect">
+                <div class="field__label">
+                    <label>Договор:</label>
+                </div>
+                <div class="field__value">
+                    <div class="input__out">
+                        <div class="input__in">
+                            <input type="text" class="editInput" readonly value="Аренда торговых площадей" />
+                        </div>
+                        <div class="input__buttons">
+                            <span class="btn drop"></span>
+                            <span class="btn dictionary"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hint">
+                    Стоит ли включать в список реквизитов планируемого поступления договор в случае B2C продаж?
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="task" id="task_2">
+        <div class="task__description">
+            <p>
+                Ваша компания закупает сырье для единственного продуктового направления.
+                <br/>
+                Закупками занимается пять менеджеров.
+                <br/>
+                У компании один расчетный счет и нет кассы, одно подразделение, расширений не планируется.
+                <br/>
+                Оплату бухгалтеры производят по факту поставки.
+            </p>
+            <p>Выберите реквизиты, которые стоит включить в заявку на оплату.</p>
+            <p><strong>Подсказка: важно выбрать именно реквизит, а не позицию из соответствующего ему справочника.</strong></p>
+        </div>
+        <div class="card">
+            <div class="top">
+                <div class="top__block">
+                    <span class="top__button top__button-home">
+                        <svg class="svg_icon">
+                            <use xlink:href="#svg_home" href="#svg_home"></use>
+                        </svg>
+                    </span>
+                    <span class="top__button top__button-prev">
+                        <svg class="svg_icon">
+                            <use xlink:href="#svg_arrow-prev" href="#svg_arrow-prev"></use>
+                        </svg>
+                    </span>
+                    <span class="top__button top__button-next disabled">
+                        <svg class="svg_icon">
+                            <use xlink:href="#svg_arrow-next" href="#svg_arrow-next"></use>
+                        </svg>
+                    </span>
+                </div>
+                <div class="top__block" style="margin: 0 auto 0 1em">
+                    <span class="sprited star"></span>
+                    <div class="toplineBox">
+                        Заявка на оплату 000000001 от 01.01.2021
+                    </div>
+                </div>
+                <div class="top__block">
+                    <span class="sprited url"></span>
+                    <span class="sprited more"></span>
+                    <span class="sprited close"></span>
+                </div>
+            </div>
+            <div class="content">
+                <div class="commands">
+                    <div class="command command__type-main">
+                        <span class="command__text">Провести и закрыть</span>
+                    </div>
+                    <div class="command">
+                        <span class="command__text">Провести</span>
+                    </div>
+                    <div class="command command__type-post" style="margin: 0 1em;">
+                        <span class="command__text">Сохранить</span>
+                    </div>
+                    <div class="command">
+                        <span class="command__ico">
+                            <img src="css/dk.png" alt="operations" />
+                        </span>
+                    </div>
+                    <div class="command command__type-more" style="margin-left: auto;">
+                        <span class="command__text">Еще</span>
+                        <span class="command__drop"></span>
+                    </div>
+                </div>
+                <div class="form">
+
+                    <div class="field__label">
+                        <label>Номер:</label>
+                    </div>
+
+                    <div class="field__value">
+                        <div class="input__out">
+                            <div class="input__in">
+                                <input type="text" class="editInput" readonly value="000000001" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field__quest">
+                        <div class="placeholder"></div>
+                    </div>
+
+                    <div class="field__label">
+                        <label>Дата:</label>
+                    </div>
+                    <div class="field__value">
+                        <div class="input__out">
+                            <div class="input__in">
+                                <input type="text" class="editInput" readonly value="01.01.2018 12:00:00" />
+                            </div>
+                            <div class="input__buttons">
+                                <span class="btn calendar"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field__quest">
+                        <div class="placeholder"></div>
+                    </div>
+
+                    <div class="field__label">
+                        <label>Дата по договору:</label>
+                    </div>
+                    <div class="field__value">
+                        <div class="input__out">
+                            <div class="input__in">
+                                <input type="text" class="editInput" readonly value="04.01.2018" />
+                            </div>
+                            <div class="input__buttons">
+                                <span class="btn calendar"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field__quest">
+                        <div class="placeholder"></div>
+                    </div>
+
+                    <div class="field__label">
+                        <label>Дата платежа:</label>
+                    </div>
+                    <div class="field__value">
+                        <div class="input__out">
+                            <div class="input__in">
+                                <input type="text" class="editInput" readonly value="09.01.2018" />
+                            </div>
+                            <div class="input__buttons">
+                                <span class="btn calendar"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field__quest">
+                        <div class="placeholder"></div>
+                    </div>
+
+                    <div class="field__label">
+                        <label>Смещение по дате:</label>
+                    </div>
+                    <div class="field__value">
+                        <div class="input__out">
+                            <div class="input__in">
+                                <input type="text" class="editInput" readonly value="5" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field__quest">
+                        <div class="placeholder"></div>
+                    </div>
+
+                    <div class="sum"></div>
+                </div>
+            </div>
+        </div>
+        <div class="variants">
+            <div class="variant correct">
+                <div class="field__label">
+                    <label>Основание:</label>
+                </div>
+                <div class="field__value">
+                    <div class="input__out">
+                        <div class="input__in">
+                            <input type="text" class="editInput" readonly value="Поступление товаров и услуг" />
+                        </div>
+                        <div class="input__buttons">
+                            <span class="btn drop"></span>
+                            <span class="btn dictionary"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="variant correct">
+                <div class="field__label">
+                    <label>Контрагент:</label>
+                </div>
+                <div class="field__value">
+                    <div class="input__out">
+                        <div class="input__in">
+                            <input type="text" class="editInput" readonly value="Компания Бетта" />
+                        </div>
+                        <div class="input__buttons">
+                            <span class="btn drop"></span>
+                            <span class="btn dictionary"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="variant correct">
+                <div class="field__label">
+                    <label>Ответственный:</label>
+                </div>
+                <div class="field__value">
+                    <div class="input__out">
+                        <div class="input__in">
+                            <input type="text" class="editInput" readonly value="Иванов Петр Сергеевич" />
+                        </div>
+                        <div class="input__buttons">
+                            <span class="btn drop"></span>
+                            <span class="btn dictionary"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="variant incorrect">
+                <div class="field__label">
+                    <label>ЦФО:</label>
+                </div>
+                <div class="field__value">
+                    <div class="input__out">
+                        <div class="input__in">
+                            <input type="text" class="editInput" readonly value="Центральное подразделение" />
+                        </div>
+                        <div class="input__buttons">
+                            <span class="btn drop"></span>
+                            <span class="btn dictionary"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hint">
+                    Пока у компании всего одно. подразделение, и расширения не предвидится.
+                    В такой ситуации не стоит тратить время и силы на внедрение реквизита и справочника ЦФО
+                </div>
+            </div>
+            <div class="variant correct">
+                <div class="field__label">
+                    <label>Статус:</label>
+                </div>
+                <div class="field__value">
+                    <div class="input__out">
+                        <div class="input__in">
+                            <input type="text" class="editInput" readonly value="Запланирован" />
+                        </div>
+                        <div class="input__buttons">
+                            <span class="btn drop"></span>
+                            <span class="btn dictionary"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="variant correct">
+                <div class="field__label">
+                    <label>Статья:</label>
+                </div>
+                <div class="field__value">
+                    <div class="input__out">
+                        <div class="input__in">
+                            <input type="text" class="editInput" readonly value="Оплата сырья и материалов" />
+                        </div>
+                        <div class="input__buttons">
+                            <span class="btn drop"></span>
+                            <span class="btn dictionary"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="variant incorrect">
+                <div class="field__label">
+                    <label>Проект:</label>
+                </div>
+                <div class="field__value">
+                    <div class="input__out">
+                        <div class="input__in">
+                            <input type="text" class="editInput" readonly value="Не выбран" />
+                        </div>
+                        <div class="input__buttons">
+                            <span class="btn drop"></span>
+                            <span class="btn dictionary"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hint">
+                    Пока что у компании одно продуктовое направление, и расширения не предвидится.
+                    В такой ситуации не стоит тратить время и силы на внедрение реквизита и справочника проектов
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="task" id="task_3">
+        <div class="task__description">
+            <p>
+                Ваша компания занимается торговлей, часто арендует торговые и складские площади у одних и тех
+                же поставщиков.
+                <br/>
+                У компании единый расчетный счет, однако все полученные компанией средства распределяются между
+                подразделениями в определенных пропорциях.
+                <br/>
+                За расходы каждого подразделения отвечает свой менеджер.
+                <br/>
+                В компании нет проектной активности, все процессы централизованы.
+            </p>
+            <p>Выберите реквизиты, которые стоит включить в заявку на оплату.</p>
+
+            <p><strong>Подсказка: важно выбрать именно реквизит, а не позицию из соответствующего ему справочника.</strong></p>
+        </div>
+        <div class="card">
+            <div class="top">
+                <div class="top__block">
+                    <span class="top__button top__button-home">
+                        <svg class="svg_icon">
+                            <use xlink:href="#svg_home" href="#svg_home"></use>
+                        </svg>
+                    </span>
+                    <span class="top__button top__button-prev">
+                        <svg class="svg_icon">
+                            <use xlink:href="#svg_arrow-prev" href="#svg_arrow-prev"></use>
+                        </svg>
+                    </span>
+                    <span class="top__button top__button-next disabled">
+                        <svg class="svg_icon">
+                            <use xlink:href="#svg_arrow-next" href="#svg_arrow-next"></use>
+                        </svg>
+                    </span>
+                </div>
+                <div class="top__block" style="margin: 0 auto 0 1em">
+                    <span class="sprited star"></span>
+                    <div class="toplineBox">
+                        Плановое поступление 000000001 от 02.01.2021
+                    </div>
+                </div>
+                <div class="top__block">
+                    <span class="sprited url"></span>
+                    <span class="sprited more"></span>
+                    <span class="sprited close"></span>
+                </div>
+            </div>
+            <div class="content">
+                <div class="commands">
+                    <div class="command command__type-main">
+                        <span class="command__text">Провести и закрыть</span>
+                    </div>
+                    <div class="command">
+                        <span class="command__text">Провести</span>
+                    </div>
+                    <div class="command command__type-post" style="margin: 0 1em;">
+                        <span class="command__text">Сохранить</span>
+                    </div>
+                    <div class="command">
+                        <span class="command__ico">
+                            <img src="css/dk.png" alt="operations" />
+                        </span>
+                    </div>
+                    <div class="command command__type-more" style="margin-left: auto;">
+                        <span class="command__text">Еще</span>
+                        <span class="command__drop"></span>
+                    </div>
+                </div>
+                <div class="form">
+
+                    <div class="field__label">
+                        <label>Номер:</label>
+                    </div>
+
+                    <div class="field__value">
+                        <div class="input__out">
+                            <div class="input__in">
+                                <input type="text" class="editInput" readonly value="000000001" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field__quest">
+                        <div class="placeholder"></div>
+                    </div>
+
+                    <div class="field__label">
+                        <label>Дата:</label>
+                    </div>
+                    <div class="field__value">
+                        <div class="input__out">
+                            <div class="input__in">
+                                <input type="text" class="editInput" readonly value="21.02.2021 12:00:00" />
+                            </div>
+                            <div class="input__buttons">
+                                <span class="btn calendar"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field__quest">
+                        <div class="placeholder"></div>
+                    </div>
+
+                    <div class="field__label">
+                        <label>Дата по договору:</label>
+                    </div>
+                    <div class="field__value">
+                        <div class="input__out">
+                            <div class="input__in">
+                                <input type="text" class="editInput" readonly value="05.05.2021" />
+                            </div>
+                            <div class="input__buttons">
+                                <span class="btn calendar"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field__quest">
+                        <div class="placeholder"></div>
+                    </div>
+
+                    <div class="field__label">
+                        <label>Дата платежа:</label>
+                    </div>
+                    <div class="field__value">
+                        <div class="input__out">
+                            <div class="input__in">
+                                <input type="text" class="editInput" readonly value="07.05.2021" />
+                            </div>
+                            <div class="input__buttons">
+                                <span class="btn calendar"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field__quest">
+                        <div class="placeholder"></div>
+                    </div>
+
+                    <div class="field__label">
+                        <label>Смещение по дате:</label>
+                    </div>
+                    <div class="field__value">
+                        <div class="input__out">
+                            <div class="input__in">
+                                <input type="text" class="editInput" readonly value="2" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field__quest">
+                        <div class="placeholder"></div>
+                    </div>
+                    <div></div>
+                    <div></div>
+                    <div class="field__quest">
+                        <div class="placeholder"></div>
+                    </div>
+
+                    <div class="sum"></div>
+                </div>
+            </div>
+        </div>
+        <div class="variants">
+            <div class="variant correct">
+                <div class="field__label">
+                    <label>Ответственный:</label>
+                </div>
+                <div class="field__value">
+                    <div class="input__out">
+                        <div class="input__in">
+                            <input type="text" class="editInput" readonly value="Иванов Петр Сергеевич" />
+                        </div>
+                        <div class="input__buttons">
+                            <span class="btn drop"></span>
+                            <span class="btn dictionary"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="variant correct">
+                <div class="field__label">
+                    <label>Контрагент:</label>
+                </div>
+                <div class="field__value">
+                    <div class="input__out">
+                        <div class="input__in">
+                            <input type="text" class="editInput" readonly value="Компания Альфа" />
+                        </div>
+                        <div class="input__buttons">
+                            <span class="btn drop"></span>
+                            <span class="btn dictionary"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="variant correct">
+                <div class="field__label">
+                    <label>Статус:</label>
+                </div>
+                <div class="field__value">
+                    <div class="input__out">
+                        <div class="input__in">
+                            <input type="text" class="editInput" readonly value="Запланирован" />
+                        </div>
+                        <div class="input__buttons">
+                            <span class="btn drop"></span>
+                            <span class="btn dictionary"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="variant incorrect">
+                <div class="field__label">
+                    <label>Счет/Касса:</label>
+                </div>
+                <div class="field__value">
+                    <div class="input__out">
+                        <div class="input__in">
+                            <input type="text" class="editInput" readonly value="р/с в Банке №1" />
+                        </div>
+                        <div class="input__buttons">
+                            <span class="btn drop"></span>
+                            <span class="btn dictionary"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hint">
+                    У компании один расчетный счет и нет кассы.
+                    В такой ситуации нецелесообразно включать в заявку реквизит “Счет/Касса”
+                </div>
+            </div>
+            <div class="variant correct">
+                <div class="field__label">
+                    <label>ЦФО:</label>
+                </div>
+                <div class="field__value">
+                    <div class="input__out">
+                        <div class="input__in">
+                            <input type="text" class="editInput" readonly value="Регион Юг" />
+                        </div>
+                        <div class="input__buttons">
+                            <span class="btn drop"></span>
+                            <span class="btn dictionary"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="variant correct">
+                <div class="field__label">
+                    <label>Статья:</label>
+                </div>
+                <div class="field__value">
+                    <div class="input__out">
+                        <div class="input__in">
+                            <input type="text" class="editInput" readonly value="Оплата сырья и материалов" />
+                        </div>
+                        <div class="input__buttons">
+                            <span class="btn drop"></span>
+                            <span class="btn dictionary"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="variant incorrect">
+                <div class="field__label">
+                    <label>Проект:</label>
+                </div>
+                <div class="field__value">
+                    <div class="input__out">
+                        <div class="input__in">
+                            <input type="text" class="editInput" readonly value="Расширение торговой сети" />
+                        </div>
+                        <div class="input__buttons">
+                            <span class="btn drop"></span>
+                            <span class="btn dictionary"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hint">
+                    У компании нет проектной активности, все процессы централизованы.
+                    В такой ситуации нецелесообразно включать в заявку реквизит “Проект”
+                </div>
+            </div>
+            <div class="variant correct">
+                <div class="field__label">
+                    <label>Договор:</label>
+                </div>
+                <div class="field__value">
+                    <div class="input__out">
+                        <div class="input__in">
+                            <input type="text" class="editInput" readonly value="Аренда торговых площадей" />
+                        </div>
+                        <div class="input__buttons">
+                            <span class="btn drop"></span>
+                            <span class="btn dictionary"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/jquery.js"></script>
+<script src="js/jquery-ui.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>

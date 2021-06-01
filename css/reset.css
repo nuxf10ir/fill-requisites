@@ -1,0 +1,31 @@
+html {
+    color: #000;
+    background: #fff;
+    cursor: default;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    font-size: 10pt;
+}
+
+body, div, p, th, td, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, button, textarea, select {
+    margin: 0;
+    padding: 0
+}
+
+input {
+    outline: none;
+    border: none;
+}
+
+
+fieldset, img {
+    border: 0
+}
+
+button, caption, code, em, input, optgroup, option, select, strong, textarea, th, var {
+    font: inherit
+}
+
+
